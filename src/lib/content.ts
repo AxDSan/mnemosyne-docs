@@ -88,6 +88,8 @@ export const pageOrder: string[] = [
   "migration/from-holographic",
   "migration/from-honcho",
   "migration/from-supermemory",
+  "partners/overview",
+  "partners/atlas-cloud",
 ];
 
 const sectionMap: Record<string, string> = {
@@ -103,6 +105,7 @@ const sectionMap: Record<string, string> = {
   "comparisons": "Comparisons",
   "migration": "Migration",
   "integration": "Integration",
+  "partners": "Partners",
 };
 
 export function pageExists(path: string): boolean {

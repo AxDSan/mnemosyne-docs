@@ -145,6 +145,16 @@ The sleep cycle uses an LLM to summarize grouped working memories before promoti
 | `MNEMOSYNE_HOST_LLM_PROVIDER` | — | Provider override for host LLM adapter (e.g. openai-codex) |
 | `MNEMOSYNE_HOST_LLM_N_CTX` | `32000` | Context window budget when using host LLM adapter |
 
+Any OpenAI-compatible endpoint works here — a local `llama.cpp` or vLLM server, or a hosted provider. For example, with [Atlas Cloud](/partners/atlas-cloud) (a compute partner):
+
+```bash
+export MNEMOSYNE_LLM_BASE_URL=https://api.atlascloud.ai/v1
+export MNEMOSYNE_LLM_API_KEY=your-api-key
+export MNEMOSYNE_LLM_MODEL=deepseek-v3
+```
+
+Leave `MNEMOSYNE_LLM_BASE_URL` unset to keep consolidation entirely local (GGUF model, then AAAK extractive compression).
+
 ### Entity & Fact Extraction
 
 | Variable | Default | Description |

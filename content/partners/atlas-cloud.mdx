@@ -1,0 +1,71 @@
+export const metadata = {
+  title: 'Atlas Cloud — Compute Partner',
+  description: 'Atlas Cloud provides inference credits for Mnemosyne benchmarks, and an OpenAI-compatible endpoint you can point Mnemosyne at for sleep consolidation and fact extraction.',
+  openGraph: { images: ['/og-image.svg'] },
+  twitter: { card: 'summary_large_image' },
+};
+
+# Atlas Cloud
+
+<Callout type="info" title="Sponsored — Compute Partner">
+Atlas Cloud provides Mnemosyne with inference API credits. This is a disclosed material connection under the FTC Endorsement Guides (16 CFR Part 255). Atlas Cloud has no editorial control over our benchmarks or documentation. See the [sponsorship policy](/partners/overview).
+</Callout>
+
+[Atlas Cloud](https://www.atlascloud.ai/) is a full-modal AI inference platform: a single API for 300+ curated models across LLM, image generation, and video generation. You connect once instead of maintaining a separate vendor integration per modality.
+
+Relevant to Mnemosyne: the chat endpoint is **OpenAI-compatible**, so it drops into the existing remote-LLM path with no adapter and no code change.
+
+## What the credits pay for
+
+| Workload | What it does |
+|----------|--------------|
+| Nightly recall benchmarks | LongMemEval and BEAM retrieval runs against the current `main` |
+| Multi-model parity tests | Confirms consolidation and fact extraction behave consistently across models, not just the one we develop against |
+| Provider coverage | Regression-tests the OpenAI-compatible remote path used by Mnemosyne and the Hermes plugin |
+
+## Using Atlas Cloud with Mnemosyne
+
+Mnemosyne calls an LLM for two things: **sleep consolidation** (summarizing working memories into episodic ones) and **fact extraction** (`remember(extract=True)`). Both go through the OpenAI-compatible remote path.
+
+```bash
+export MNEMOSYNE_LLM_ENABLED=true
+export MNEMOSYNE_LLM_BASE_URL=https://api.atlascloud.ai/v1
+export MNEMOSYNE_LLM_API_KEY=your-atlas-cloud-key
+export MNEMOSYNE_LLM_MODEL=deepseek-v3
+```
+
+Verify the wiring with a consolidation run:
+
+```bash
+mnemosyne sleep --dry-run
+```
+
+Same variables work for the Hermes plugin — it reads the Mnemosyne environment directly.
+
+### Fallback chain
+
+Set Atlas Cloud as the fallback instead, and Mnemosyne only reaches for it when the primary endpoint fails:
+
+```bash
+export MNEMOSYNE_LLM_FALLBACK_BASE_URL=https://api.atlascloud.ai/v1
+export MNEMOSYNE_LLM_FALLBACK_API_KEY=your-atlas-cloud-key
+export MNEMOSYNE_LLM_FALLBACK_MODELS=deepseek-v3
+```
+
+Full precedence order is documented in [LLM Backends](/architecture/llm-backends).
+
+<Callout type="warning" title="Memory content leaves the machine">
+Any remote LLM endpoint — Atlas Cloud included — receives the memory text being consolidated or extracted. If that is not acceptable for your data, leave `MNEMOSYNE_LLM_BASE_URL` unset and Mnemosyne falls back to the local GGUF model, then to AAAK extractive compression. Both run fully offline. See [Data Privacy](/security/data-privacy).
+</Callout>
+
+### Embeddings stay local
+
+This configures the LLM path only. Embeddings still run locally through fastembed (`BAAI/bge-small-en-v1.5`, 384 dimensions) unless you explicitly enable [cloud embeddings](/getting-started/configuration).
+
+## Pricing
+
+Atlas Cloud publishes a [coding plan](https://www.atlascloud.ai/console/coding-plan) for budget-friendly API access. Pricing and model availability are theirs to change — check their [docs](https://www.atlascloud.ai/docs) for current rates and the full model list.
+
+## Not an endorsement over alternatives
+
+Mnemosyne is provider-neutral. Any OpenAI-compatible endpoint works in exactly the same slots, and no provider is privileged in code, defaults, or documentation order. This page exists because the partnership is disclosed, not because Atlas Cloud is required.

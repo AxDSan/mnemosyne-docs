@@ -1,0 +1,49 @@
+export const metadata = {
+  title: 'Sponsors & Partners — Who Funds Mnemosyne',
+  description: 'Companies providing compute credits, hosting, and developer tooling to Mnemosyne, plus the disclosure and editorial-control policy that governs those partnerships.',
+  openGraph: { images: ['/og-image.svg'] },
+  twitter: { card: 'summary_large_image' },
+};
+
+# Sponsors & Partners
+
+Mnemosyne is MIT-licensed and self-funded, with in-kind support from companies that provide compute credits, hosting, and developer tooling. Those contributions pay for the things that are expensive to run in the open: nightly recall benchmarks, multi-model parity tests, and CI across the support matrix.
+
+Every partnership is listed here and on [mnemosyne.site/partners](https://mnemosyne.site/partners). Nothing is silent.
+
+## Current partners
+
+| Partner | Tier | Contribution | Used for |
+|---------|------|--------------|----------|
+| [Atlas Cloud](/partners/atlas-cloud) | Compute | Inference API credits | Nightly recall benchmarks, multi-model parity tests, OpenAI-compatible provider coverage |
+
+<Callout type="info" title="Disclosure">
+Compute Partners are disclosed material connections under the FTC Endorsement Guides (16 CFR Part 255). Sponsors have no editorial control over benchmark methodology, results, or technical claims.
+</Callout>
+
+## What we accept
+
+- Compute credits (LLM, embedding, GPU inference)
+- Hosting and infrastructure credits
+- Developer tooling licenses and observability platforms
+
+## What we do not accept
+
+- Payment for feature prioritization or roadmap placement
+- Payment for integration order in code or documentation
+- Sponsorships from companies whose products conflict with our values (surveillance, privacy violations, vendor lock-in by design)
+- Editorial veto over benchmark methodology or technical content
+
+## Editorial control
+
+The maintainers retain full control over benchmark methodology, results, and any technical claim made about a sponsor's product. If a sponsor's product has a real flaw surfaced by our benchmarks, we publish it. When we publish content about a sponsor or their product, we label it `#ad` or "Sponsored" per the FTC Endorsement Guides.
+
+A partner listing is never a recommendation to use that provider over any other. Mnemosyne works with any OpenAI-compatible endpoint, and works fully offline with a local GGUF model and no provider at all.
+
+## Termination
+
+Either party can end a sponsorship at any time. On termination, we remove the partner's listing within 30 days.
+
+## Partner with us
+
+If your company runs an OSS credits program, open an issue on [GitHub](https://github.com/mnemosyne-oss/mnemosyne/issues) tagged `sponsorship`, or email `sponsors@mnemosyne.site`. We respond within a few business days.
