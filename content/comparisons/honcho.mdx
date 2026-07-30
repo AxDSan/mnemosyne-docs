@@ -13,7 +13,7 @@ export const metadata = {
 
 An honest, technical comparison for users running memory systems locally with Hermes Agent and OpenClaw.
 
-**Last updated:** 2026-06-08 · Mnemosyne v3.12.0
+**Last updated:** 2026-07-30 · Mnemosyne v3.14.0
 
 > **TL;DR:** Honcho is the only memory system with genuine **reasoning** about memory -- not just store-and-retrieve. It uses a background reasoning model (Neuromancer) that "dreams" about stored data to build representations, summaries, and logical deductions. Mnemosyne is a lightweight, deterministic memory layer. Honcho is what you choose when you want the system to *think* about what it knows; Mnemosyne is what you choose when you want fast, predictable storage and retrieval without standing up a reasoning pipeline.
 
@@ -30,7 +30,7 @@ An honest, technical comparison for users running memory systems locally with He
 | **Vector search** | sqlite-vec (int8/bit/float32) or numpy fallback | pgvector (cosine similarity) |
 | **Cold start** | Instant (if models cached locally) | ~10--20s (Docker containers + PostgreSQL init + Neuromancer warm-up) |
 | **Runtime memory** | ~10--20MB per session (SQLite + ONNX) | ~200--500MB (PostgreSQL pool + FastAPI + Neuromancer model runtime) |
-| **Stars / community** | New (v3.12.0) | ~5.1K GitHub stars, Plastic Labs team |
+| **Stars / community** | New | ~5.1K GitHub stars, Plastic Labs team |
 | **License** | MIT | AGPL-3.0 (restrictive for commercial use) |
 | **Pricing** | Free (MIT) | Managed service: $100 free credits, $2/million tokens ingestion, reasoning fees per call. Self-hosted: free (but you pay for 3+ LLM provider keys) |
 
@@ -257,4 +257,4 @@ Honcho provides a REST API and Python SDK. Integration is via HTTP calls to the 
 
 ---
 
-*Every feature listed for Mnemosyne has been verified against the v3.12.0 source code. Honcho features are based on the open-source repository and Plastic Labs documentation as of May 2026. If anything here is wrong, please open an issue -- we'll fix it.*
+*Every feature listed for Mnemosyne has been verified against the v3.14.0 source code. Honcho features are based on the open-source repository and Plastic Labs documentation as of May 2026. If anything here is wrong, please open an issue -- we'll fix it.*

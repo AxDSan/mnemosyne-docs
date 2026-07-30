@@ -1,6 +1,6 @@
 # Quick Start
 
-Get Mnemosyne v3.12.0 running in under 5 minutes. This guide covers installation, basic configuration, and your first memory operations — including entity extraction and temporal recall.
+Get Mnemosyne running in under 5 minutes. This guide covers installation, basic configuration, and your first memory operations — including entity extraction and temporal recall.
 
 ## Prerequisites
 
@@ -87,7 +87,7 @@ Isolate memories for different projects or contexts:
 
 <CodeBlock code={`# Create a bank for work projects
 work_mem = Mnemosyne(bank="work")
-work_mem.remember("Deployed v3.12.0 to staging.")
+work_mem.remember("Deployed the payments service to staging.")
 
 # Separate bank for personal
 personal_mem = Mnemosyne(bank="personal")
@@ -105,7 +105,7 @@ personal_mem.remember("Dentist appointment on Friday.")
 Confirm everything is working:
 
 <CodeBlock code={`python -c "import mnemosyne; print(mnemosyne.__version__)"
-# Should print: 3.12.0
+# Prints the installed version
 `} language="bash" />
 
 ## What's Next?

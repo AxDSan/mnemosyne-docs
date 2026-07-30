@@ -13,7 +13,7 @@ export const metadata = {
 
 An honest, technical comparison for users running memory systems locally with Hermes Agent and OpenClaw.
 
-**Last updated:** 2026-06-08 · Mnemosyne v3.12.0
+**Last updated:** 2026-07-30 · Mnemosyne v3.14.0
 
 > **TL;DR:** Letta is a **research-grade agent framework** with OS-inspired virtual context management, self-editing memory, and a 42-table PostgreSQL schema. Mnemosyne is a **lightweight memory layer** with 3 SQLite tables, in-process operation, and near-zero infrastructure. Letta is what you deploy when context windows are the bottleneck; Mnemosyne is what you use when you want memory that just works without standing up a database cluster.
 
@@ -30,7 +30,7 @@ An honest, technical comparison for users running memory systems locally with He
 | **Vector search** | sqlite-vec (int8/bit/float32) or numpy fallback | pgvector HNSW (mature, optimized) |
 | **Cold start** | Instant (if models cached locally) | ~10–30s (Docker container boot + PostgreSQL init + agent creation) |
 | **Runtime memory** | ~10–20MB per session (SQLite + ONNX) | ~200–500MB (PostgreSQL pool + Letta server + agent runtime) |
-| **Stars / community** | New (v3.12.0) | ~21.8K GitHub stars, active research community |
+| **Stars / community** | New | ~21.8K GitHub stars, active research community |
 | **Pricing** | Free (MIT) | OSS free (Letta Code), Cloud API usage-based ($0.00015/sec tool execution + LLM) |
 
 ---
@@ -258,4 +258,4 @@ Letta provides a REST API and Python SDK (`letta-client`). Agents are created se
 
 ---
 
-*Every feature listed for Mnemosyne has been verified against the v3.12.0 source code. Letta features are based on the open-source repository and documentation as of May 2026. If anything here is wrong, please open an issue -- we'll fix it.*
+*Every feature listed for Mnemosyne has been verified against the v3.14.0 source code. Letta features are based on the open-source repository and documentation as of May 2026. If anything here is wrong, please open an issue -- we'll fix it.*

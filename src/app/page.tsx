@@ -23,7 +23,7 @@ export default function Home() {
         <div className="max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cream-dark dark:bg-charcoal text-accent-terracotta dark:text-accent-terracotta-light text-sm font-medium mb-6 tracking-wide uppercase">
             <Zap size={14} />
-            v{version}: Config profiles, cross-session recall, atomic batch + 22 fixes
+            v{version}: local-first agent memory in a single SQLite file
           </div>
           <h1 className="text-5xl sm:text-6xl font-serif font-semibold tracking-tight text-charcoal dark:text-parchment mb-6 leading-tight">
             Memory for AI Agents

@@ -17,7 +17,7 @@ const searchIndex: SearchResult[] = [
   { title: "Installation", href: "/getting-started/installation", excerpt: "pip install mnemosyne-memory or use as Hermes plugin", section: "Getting Started" },
   { title: "Configuration", href: "/getting-started/configuration", excerpt: "All environment variables, YAML config, and provider setup", section: "Getting Started" },
   { title: "First Steps", href: "/getting-started/first-steps", excerpt: "Write, read, and search memories after installation", section: "Getting Started" },
-  { title: "Updating Mnemosyne", href: "/getting-started/updating", excerpt: "Upgrade from v2.7 through v3.11.0, schema migrations, and rollback", section: "Getting Started" },
+  { title: "Updating Mnemosyne", href: "/getting-started/updating", excerpt: "Upgrade guidance across 3.x releases, schema migrations, and rollback", section: "Getting Started" },
   // Architecture
   { title: "BEAM Architecture Overview", href: "/architecture/beam-overview", excerpt: "Biological-inspired Episodic-Associative Memory core architecture", section: "Architecture" },
   { title: "System Architecture", href: "/architecture/system-design", excerpt: "High-level system design and data flow", section: "Architecture" },
@@ -51,8 +51,8 @@ const searchIndex: SearchResult[] = [
   { title: "Python SDK", href: "/api/python-sdk", excerpt: "Complete reference for the Mnemosyne Python API", section: "API" },
   { title: "Hermes Plugin", href: "/api/hermes-plugin", excerpt: "Integration with Hermes agent framework", section: "API" },
   { title: "REST API", href: "/api/rest", excerpt: "HTTP endpoints for memory CRUD, search, session context, and consolidation", section: "API" },
-  { title: "MCP Server", href: "/api/mcp-server", excerpt: "Model Context Protocol server with 25 tools and dual transports", section: "API" },
-  { title: "MCP Tool Schema", href: "/api/tool-schema", excerpt: "Full MCP tool schema reference with 28 tools", section: "API" },
+  { title: "MCP Server", href: "/api/mcp-server", excerpt: "Model Context Protocol server with 28 callable tools and dual transports", section: "API" },
+  { title: "MCP Tool Schema", href: "/api/tool-schema", excerpt: "Full tool schema reference: 37 declared, 28 callable over MCP", section: "API" },
   // Deployment
   { title: "Deployment Overview", href: "/deployment/overview", excerpt: "Deploy Mnemosyne to production", section: "Deployment" },
   { title: "Fly.io Deployment", href: "/deployment/fly-io", excerpt: "Serverless deployment with persistent SQLite volumes", section: "Deployment" },

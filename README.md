@@ -1,6 +1,6 @@
 # Mnemosyne Documentation
 
-The official documentation site for [Mnemosyne](https://github.com/axdsan/mnemosyne) — the native memory system for AI agents.
+The official documentation site for [Mnemosyne](https://github.com/mnemosyne-oss/mnemosyne) — the native memory system for AI agents.
 
 **Live site:** [docs.mnemosyne.site](https://docs.mnemosyne.site)
 
@@ -20,7 +20,7 @@ src/app/(docs)/       # Next.js App Router pages (route + render MDX)
 src/components/        # UI components (sidebar, search, code-block, etc.)
 src/lib/               # Content utilities, SEO, related-pages logic
 public/                # Static assets, llms.txt, favicons, OG images
-scripts/               # Build helpers (generate-pages, smoke-test, harden)
+scripts/               # Build helpers (smoke-test, harden)
 version.txt            # Current Mnemosyne version (read at build time)
 ```
 
@@ -38,7 +38,7 @@ npm run lint     # eslint
 All docs live as `.mdx` files in `content/`. To add a new page:
 
 1. Create `content/<section>/<page>.mdx` with a `# Title` H1
-2. Create the route at `src/app/(docs)/<section>/<page>/page.mdx` (can re-export or duplicate)
+2. Create the route shim at `src/app/(docs)/<section>/<page>/page.mdx` (re-export only, never duplicate; see AGENTS.md)
 3. Add the slug to `pageOrder` in `src/lib/content.ts` (controls prev/next nav)
 4. Add an entry to `searchIndex` in `src/components/search.tsx`
 5. Add the page to the relevant section in `src/components/sidebar.tsx`
@@ -56,7 +56,7 @@ All docs live as `.mdx` files in `content/`. To add a new page:
 
 ## License
 
-MIT — see [LICENSE](https://github.com/axdsan/mnemosyne/blob/main/LICENSE) in the main repo.
+MIT — see [LICENSE](https://github.com/mnemosyne-oss/mnemosyne/blob/main/LICENSE) in the main repo.
 
 ## Author
 

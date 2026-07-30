@@ -1,0 +1,154 @@
+# Using Mnemosyne with Hermes
+
+This is the only page you need to wire Mnemosyne into Hermes. Read it in order.
+
+<Callout type="warning" title="One-time install only">
+If you already have Mnemosyne running, skip to "Verify" or "Troubleshooting". Don't reinstall.
+</Callout>
+
+## Recommended Setup
+
+### 1. Install Mnemosyne
+
+Inside your Hermes virtual environment:
+
+```bash
+pip install mnemosyne-memory[all]
+```
+
+If you're on a Debian/Ubuntu system with PEP 668 (externally-managed environment):
+
+```bash
+pip install mnemosyne-memory[all] --break-system-packages
+# or use a fresh venv:
+python3 -m venv mnemosyne-env
+source mnemosyne-env/bin/activate
+pip install mnemosyne-memory[all]
+```
+
+**Where should Mnemosyne live?** Inside the same venv as Hermes, or a venv Hermes can access. The MemoryProvider import path must resolve. If you use Hermes's built-in venv (at `/usr/local/lib/hermes-agent/venv/`), install there.
+
+### 2. Configure Hermes to Use Mnemosyne
+
+Edit your `~/.hermes/config.yaml`:
+
+```yaml
+memory:
+  # Keep the built-in MemoryStore for MEMORY.md system prompt
+  memory_enabled: true
+  user_profile_enabled: true
+  # Tell Hermes to use Mnemosyne as the provider
+  provider: mnemosyne
+  # Provider-specific configuration
+  mnemosyne:
+    # Profile isolation: false = all profiles share one DB (default)
+    #                  true  = each profile gets its own SQLite file
+    profile_isolation: false
+```
+
+### 3. Understand the Controls (Critical)
+
+There are **two separate controls** and they work independently:
+
+| Config | What it controls |
+|--------|-----------------|
+| `memory.memory_enabled` | Whether the built-in file-based MemoryStore exists and MEMORY.md appears in the system prompt. When `false`, the built-in store is gone but **Mnemosyne tools still work**. |
+| Memory toolset enable/disable | Whether ANY memory tools (built-in AND Mnemosyne) are given to the AI model. Controlled by `hermes tools enable memory` / `hermes tools disable memory`. |
+
+**The correct setup for using Mnemosyne:**
+
+- Keep `memory_enabled: true` (or `false` — your choice, Mnemosyne works either way)
+- **Do NOT run `hermes tools disable memory`** unless you want to remove ALL memory tools from your model
+
+<Callout type="danger" title="Common mistake">
+If you run `hermes tools disable memory`, you lose access to both the built-in `memory` tool AND all Mnemosyne tools. This is the single most common integration failure.
+</Callout>
+
+If you DO want to hide the built-in `memory` tool but keep Mnemosyne tools... **you can't, currently.** Both are gated by the same toolset. This is being tracked as a UX issue.
+
+### 4. Verify It's Working
+
+Don't use `hermes memory status` — it always prints "Built-in: always active" regardless of settings. It cannot tell you whether Mnemosyne is working.
+
+**Instead, use these commands:**
+
+```bash
+# Check that the provider loaded
+hermes doctor | grep -i memory
+
+# Check that Mnemosyne tools are registered
+hermes tools list
+
+# Direct test — this should succeed
+hermes --tool mnemosyne_remember content="Test memory from setup" veracity="stated"
+hermes --tool mnemosyne_recall query="Test memory"
+```
+
+You should see something like:
+```
+mnemosyne_remember — Store a memory in Mnemosyne
+mnemosyne_recall — Recall memories from Mnemosyne
+mnemosyne_forget — Forget/delete a memory
+...
+```
+
+If the tools don't show up, check:
+1. Mnemosyne is installed (`pip list  | grep mnemosyne`)
+2. `provider: mnemosyne` is set in config
+3. You haven't run `hermes tools disable memory` (re-enable with `hermes tools enable memory`)
+4. Hermes was restarted after config changes
+
+## Profile Isolation
+
+Mnemosyne supports isolating memories per Hermes profile.
+
+| `profile_isolation` | Behavior |
+|-|-|
+| `false` (default) | **All profiles share one database.** Memories from your English profile will appear when using your Italian profile, and vice versa. |
+| `true` | Each profile gets its own SQLite file. Fully isolated. The bank name is derived from: profile name → Hermes home directory basename → "default" fallback. |
+
+**How bank names work:**
+1. Hermes sends the profile name as `agent_identity`
+2. Falls back to the basename of `$HERMES_HOME` for that profile
+3. Falls back to "default"
+
+To enable per-profile isolation:
+
+```yaml
+memory:
+  provider: mnemosyne
+  mnemosyne:
+    profile_isolation: true
+```
+
+<Callout type="info" title="No profile parameter in tools">
+Mnemosyne tools don't have a `profile` parameter. Isolation is handled transparently at the database level. You can't tell which bank you're writing to from the tool call.
+</Callout>
+
+## Updating Mnemosyne
+
+```bash
+# Inside your Hermes venv
+pip install --upgrade mnemosyne-memory[all]
+
+# Restart Hermes gateway
+hermes gateway restart
+```
+
+If the update triggers an infinite loop or gateway restart issues:
+1. Stop Hermes: `hermes stop`
+2. Update Mnemosyne: `pip install --upgrade mnemosyne-memory[all]`
+3. Clear any stale cache: `rm -rf ~/.hermes/cache/*`
+4. Start Hermes: `hermes start`
+5. If the dashboard shows thousands of memories to review, that's normal after a schema migration — the provider is re-indexing. Let it finish.
+
+## Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---------|-------------|-----|
+| Mnemosyne tools don't appear in `hermes tools list` | Memory toolset is disabled | `hermes tools enable memory` then restart |
+| `hermes memory status` shows "Built-in: always active" | This is a display bug — doesn't mean anything is wrong | Ignore it; use `hermes doctor` instead |
+| "ModuleNotFoundError: No module named 'mnemosyne'" | Installed in wrong venv | `pip install mnemosyne-memory[all]` in Hermes's venv |
+| Dashboard shows thousands of memories after update | Schema migration re-indexing | Let it finish; this is one-time per major version |
+| Loop of "updating Mnemosyne" suggestions | Agent sees outdated docs and tries to fix | Kill the session, start fresh. Update was already applied. |
+| Italian/English profiles share memories | `profile_isolation: false` (the default) | Set `profile_isolation: true` and restart each profile |

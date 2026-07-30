@@ -51,14 +51,14 @@ flowchart LR
    - **Local LLM** (MiniCPM5-1B GGUF) — offline, no API key
    - **AAAK encoding** — keyword-based text substitution as final fallback
 4. **Promote**: Insert summary into `episodic_memory` with `summary_of` referencing the original IDs
-5. **Evict**: Delete the original entries from `working_memory`
+5. **Mark**: Set `consolidated_at` on the original entries in `working_memory` (rows remain recallable)
 6. **Log**: Record the consolidation in `consolidation_log`
 
 ## Retention Values
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `MNEMOSYNE_WM_MAX` | `10000` | Maximum Working Memory entries |
+| `MNEMOSYNE_WM_MAX_ITEMS` | `10000` | Maximum Working Memory entries |
 | TTL | `24h` | Time-to-live for Working Memory entries |
 
 ## Monitoring Consolidation
@@ -74,5 +74,5 @@ Consolidation events are logged to the `consolidation_log` table:
 | `created_at` | TIMESTAMP | When consolidation ran |
 
 <Callout type="info" title="Performance Impact">
-Sleep consolidation runs in a background thread and does not block agent operations. On typical hardware, a full cycle processes ~1000 entries in under 5 seconds.
+Sleep consolidation is synchronous. Call `mem.sleep()` at idle times or after heavy ingestion; the method blocks until consolidation completes. Background consolidation is a host concern: the Hermes provider runs it on its own daemon thread behind its own lock.
 </Callout>

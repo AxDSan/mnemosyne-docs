@@ -36,7 +36,7 @@ pip install mnemosyne-memory
 python -c "import mnemosyne; print(mnemosyne.__version__)"
 ```
 
-Should print the installed version (e.g., `3.10.0`).
+Should print the installed version.
 
 ## Getting started
 
@@ -49,7 +49,7 @@ Should print the installed version (e.g., `3.10.0`).
 
 - [Python API](https://docs.mnemosyne.site/api)
 - [Hermes plugin](https://docs.mnemosyne.site/api/hermes-plugin)
-- [MCP server](https://docs.mnemosyne.site/api/mcp)
+- [MCP server](https://docs.mnemosyne.site/api/mcp-server)
 
 ## Architecture
 
@@ -77,6 +77,6 @@ Should print the installed version (e.g., `3.10.0`).
 
 - License: MIT
 - Python: 3.10+
-- Repository: https://github.com/AxDSan/mnemosyne
+- Repository: https://github.com/mnemosyne-oss/mnemosyne
 - Homepage: https://mnemosyne.site
-- Latest stable: mnemosyne-memory 3.10.0
+- Latest stable: mnemosyne-memory 3.14.0

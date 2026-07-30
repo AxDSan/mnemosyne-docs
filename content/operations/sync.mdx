@@ -1,6 +1,6 @@
 # Mnemosyne Sync
 
-**Last updated:** June 2026 &middot; Mnemosyne v3.12.0
+**Last updated:** July 2026 &middot; Mnemosyne v3.14.0
 
 <Callout type="info" title="Bidirectional Memory Sync">
 Bidirectional memory sync between local and remote Mnemosyne instances.
@@ -39,14 +39,14 @@ Mnemosyne Sync enables **bidirectional, delta-based synchronization** between tw
 
 | Feature | Status |
 |---------|--------|
-| Bidirectional delta sync | v3.12.0 |
-| Pull-only / push-only modes | v3.12.0 |
-| Delta/change-based protocol | v3.12.0 (based on existing DeltaSync) |
-| Append-only event log | v3.12.0 |
-| Timestamp + importance conflict detection | v3.12.0 |
-| API key / JWT authentication | v3.12.0 |
-| Optional client-side encryption | v3.12.0 |
-| TLS guidance + examples | v3.12.0 |
+| Bidirectional delta sync | v3.6.0 |
+| Pull-only / push-only modes | v3.6.0 |
+| Delta/change-based protocol | v3.6.0 (based on existing DeltaSync) |
+| Append-only event log | v3.6.0 |
+| Timestamp + importance conflict detection | v3.6.0 |
+| API key / JWT authentication | v3.6.0 |
+| Optional client-side encryption | v3.6.0 |
+| TLS guidance + examples | v3.6.0 |
 | Conflict resolution (importance + version chains) | Planned |
 | Agent-assisted merge | Planned |
 | Sync status dashboard | Planned |
@@ -107,14 +107,14 @@ Each exchange is idempotent - events carry unique `event_id`s and are deduplicat
 
 ### Prerequisites
 
-- Mnemosyne v3.12.0+ installed on both instances
+- Mnemosyne v3.6.0+ installed on both instances
 - Network connectivity between instances (or via SSH tunnel)
 - (Recommended) TLS certificate for the remote endpoint
 
 ### 1. Set Up the Remote Instance
 
 <CodeBlock code={`# On your VPS / remote machine
-mnemosyne sync serve --port 8765 --api-key "your-secret-api-key"`} language="bash" />
+mnemosyne sync-serve --port 8765 --api-key "your-secret-api-key"`} language="bash" />
 
 This starts a sync server listening on port 8765.
 
@@ -125,30 +125,30 @@ The sync server is a management API, not a general HTTP service. It exposes only
 ### 2. Configure the Local Instance
 
 <CodeBlock code={`# On your local machine
-export MNEMOSYNE_SYNC_API_KEY="your-secret-api-key"
+export MNEMOSYNE_SYNC_TOKEN="your-secret-api-key"
 
 # Test the connection
-mnemosyne sync status --remote https://my-vps.example.com:8765`} language="bash" />
+mnemosyne sync-status --remote https://my-vps.example.com:8765`} language="bash" />
 
 ### 3. Run a Sync
 
 <CodeBlock code={`# Bidirectional sync (default)
-mnemosyne sync --remote https://my-vps.example.com:8765
+mnemosyne sync --db-path <surface.db> --remote https://my-vps.example.com:8765
 
 # Pull only (fetch remote changes without pushing local)
-mnemosyne sync --remote https://my-vps.example.com:8765 --mode pull
+mnemosyne sync --db-path <surface.db> --remote https://my-vps.example.com:8765 --mode pull
 
 # Push only (send local changes without fetching)
-mnemosyne sync --remote https://my-vps.example.com:8765 --mode push`} language="bash" />
+mnemosyne sync --db-path <surface.db> --remote https://my-vps.example.com:8765 --mode push`} language="bash" />
 
 ### 4. With Client-Side Encryption
 
 <CodeBlock code={`# Generate an encryption key
-mnemosyne sync generate-key > mnemosyne-sync.key
+mnemosyne sync-generate-key > mnemosyne-sync.key
 
 # Sync with encryption
 MNEMOSYNE_SYNC_KEY=$(cat mnemosyne-sync.key) \
-  mnemosyne sync --remote https://my-vps.example.com:8765 --encrypt`} language="bash" />
+  mnemosyne sync --db-path <surface.db> --remote https://my-vps.example.com:8765 --encrypt`} language="bash" />
 
 ---
 
@@ -187,10 +187,10 @@ Security Notice:
   +==========================================================================+
 `} language="text" />
 
-### `mnemosyne sync serve`
+### `mnemosyne sync-serve`
 
 <CodeBlock code={`
-Usage: mnemosyne sync serve [OPTIONS]
+Usage: mnemosyne sync-serve [OPTIONS]
 
 Start a sync server for remote Mnemosyne instances.
 
@@ -204,10 +204,10 @@ Options:
   --help                  Show this message and exit
 `} language="text" />
 
-### `mnemosyne sync status`
+### `mnemosyne sync-status`
 
 <CodeBlock code={`
-Usage: mnemosyne sync status [OPTIONS]
+Usage: mnemosyne sync-status [OPTIONS]
 
 Show sync status with a remote instance.
 
@@ -232,17 +232,17 @@ Example output:
   Pending:     12 local events to push
 `} language="text" />
 
-### `mnemosyne sync generate-key`
+### `mnemosyne sync-generate-key`
 
 <CodeBlock code={`
-Usage: mnemosyne sync generate-key
+Usage: mnemosyne sync-generate-key
 
 Generate a random 32-byte key for client-side encryption.
 
 Outputs a base64-encoded key suitable for MNEMOSYNE_SYNC_KEY.
 
 Example:
-  export MNEMOSYNE_SYNC_KEY=$(mnemosyne sync generate-key)
+  export MNEMOSYNE_SYNC_KEY=$(mnemosyne sync-generate-key)
 `} language="text" />
 
 ---
@@ -324,7 +324,7 @@ When the same memory is modified on both sides before a sync:
 2. **If timestamps equal** - The event with higher `importance` wins
 3. **If timestamps and importance equal** - The event from the device with the lexicographically higher `device_id` wins (deterministic tiebreaker)
 
-This is intentionally simple for v1. Conflicts are logged and visible in `mnemosyne sync status`.
+This is intentionally simple for v1. Conflicts are logged and visible in `mnemosyne sync-status`.
 
 ### Future: Version Chain Resolution
 
@@ -339,21 +339,21 @@ The event log stores `parent_event_ids` to enable causal conflict resolution (pl
 The simplest authentication method. Passed as `Authorization: Bearer ***` header.
 
 <CodeBlock code={`# Server side
-mnemosyne sync serve --api-key "***"
+mnemosyne sync-serve --api-key "***"
 
 # Client side
-export MNEMOSYNE_SYNC_API_KEY="***"
-mnemosyne sync --remote https://my-vps:8765`} language="bash" />
+export MNEMOSYNE_SYNC_TOKEN="***"
+mnemosyne sync --db-path <surface.db> --remote https://my-vps:8765`} language="bash" />
 
 ### JWT
 
 For multi-user setups or integration with existing auth systems.
 
 <CodeBlock code={`# Server side
-mnemosyne sync serve --jwt-secret "your-jwt-secret"
+mnemosyne sync-serve --jwt-secret "your-jwt-secret"
 
 # Client side
-MNEMOSYNE_SYNC_JWT="<token>" mnemosyne sync --remote https://my-vps:8765`} language="bash" />
+MNEMOSYNE_SYNC_TOKEN="<token>" mnemosyne sync --db-path <surface.db> --remote https://my-vps:8765`} language="bash" />
 
 ---
 
@@ -364,15 +364,15 @@ See [docs/security.md](security.md#encryption-in-mnemosyne-sync) for the full en
 ### Quick Reference
 
 <CodeBlock code={`# Generate a key
-mnemosyne sync generate-key
+mnemosyne sync-generate-key
 
 # Sync with encryption
 export MNEMOSYNE_SYNC_KEY="<base64-key>"
-mnemosyne sync --remote https://my-vps:8765 --encrypt
+mnemosyne sync --db-path <surface.db> --remote https://my-vps:8765 --encrypt
 
 # Or use a passphrase (key derived automatically)
-export MNEMOSYNE_SYNC_PASSPHRASE="your strong passphrase"
-mnemosyne sync --remote https://my-vps:8765 --encrypt`} language="bash" />
+export MNEMOSYNE_SYNC_KEY="your strong passphrase"
+mnemosyne sync --db-path <surface.db> --remote https://my-vps:8765 --encrypt`} language="bash" />
 
 ### Dependencies
 
@@ -404,10 +404,10 @@ services:
       - ./mnemosyne-sync.key:/run/secrets/sync.key:ro
     environment:
       - MNEMOSYNE_DATA_DIR=/data
-      - MNEMOSYNE_SYNC_KEY_FILE=/run/secrets/sync.key
+      - MNEMOSYNE_SYNC_KEY=/run/secrets/sync.key
     command: >
       sh -c "pip install -q mnemosyne-memory[sync] &&
-             mnemosyne sync serve --port 8765 --api-key $(cat /run/secrets/sync.key)"
+             mnemosyne sync-serve --port 8765 --api-key $(cat /run/secrets/sync.key)"
 
 volumes:
   mnemosyne-data:`} language="yaml" />
@@ -460,7 +460,7 @@ app = "mnemosyne-sync"
 
 <CodeBlock code={`# Deploy
 fly launch --from fly.toml
-fly secrets set MNEMOSYNE_SYNC_API_KEY="sk-mnemo-..."
+fly secrets set MNEMOSYNE_SYNC_TOKEN="sk-mnemo-..."
 fly deploy`} language="bash" />
 
 ### SSH Tunnel (No Public Port)
@@ -471,10 +471,10 @@ If you don't want to expose the sync port publicly:
 ssh -L 8765:localhost:8765 user@your-vps
 
 # On your VPS
-mnemosyne sync serve --port 8765 --host 127.0.0.1 --api-key "..."
+mnemosyne sync-serve --port 8765 --host 127.0.0.1 --api-key "..."
 
 # On your local machine (tunnel active)
-mnemosyne sync --remote http://localhost:8765`} language="bash" />
+mnemosyne sync --db-path <surface.db> --remote http://localhost:8765`} language="bash" />
 
 ### Ready-to-Use Configs
 
@@ -502,7 +502,7 @@ The complete security model is documented in [docs/security.md](security.md). Ke
 
 ---
 
-## Limitations (v3.12.0–3.12.0)
+## Limitations
 
 - **No automatic sync scheduling** - Use `--interval` for continuous sync or cron for periodic sync
 - **Simple conflict resolution** - Latest-wins with importance tiebreaker. Version-chain resolution planned.
@@ -519,7 +519,7 @@ The complete security model is documented in [docs/security.md](security.md). Ke
 
 - Version chain conflict resolution using TripleStore's existing `valid_from/valid_until/superseded_by`
 - Agent-assisted merge proposal (via Hermes plugin)
-- `mnemosyne sync status` with detailed conflict reporting
+- `mnemosyne sync-status` with detailed conflict reporting
 - Per-bank sync isolation
 
 ### Phase 4 (Future)
@@ -551,7 +551,7 @@ The sync layer is the foundation for a future hosted service. The architecture w
 
 Mnemosyne Cloud will follow a **Bring Your Own Key** model, going one step further than Zep's data-at-rest BYOK:
 
-1. **You generate your key locally** (`mnemosyne sync generate-key`). It never touches Cloud servers.
+1. **You generate your key locally** (`mnemosyne sync-generate-key`). It never touches Cloud servers.
 2. **Your client encrypts payloads** before they leave your machine.
 3. **Cloud stores opaque ciphertext** plus routing metadata. A Cloud breach exposes metadata (event counts, timestamps, device IDs) but never memory content.
 4. **Only your devices decrypt.** Cloud cannot read, train on, or sell your memories because it mathematically cannot decrypt them.
