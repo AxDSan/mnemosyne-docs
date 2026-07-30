@@ -52,7 +52,7 @@ const searchIndex: SearchResult[] = [
   { title: "Hermes Plugin", href: "/api/hermes-plugin", excerpt: "Integration with Hermes agent framework", section: "API" },
   { title: "REST API", href: "/api/rest", excerpt: "HTTP endpoints for memory CRUD, search, session context, and consolidation", section: "API" },
   { title: "MCP Server", href: "/api/mcp-server", excerpt: "Model Context Protocol server with 28 callable tools and dual transports", section: "API" },
-  { title: "MCP Tool Schema", href: "/api/tool-schema", excerpt: "Full tool schema reference: 37 declared, 28 callable over MCP", section: "API" },
+  { title: "MCP Tool Schema", href: "/api/tool-schema", excerpt: "Full tool schema reference: 36 advertised, 28 callable over MCP", section: "API" },
   // Deployment
   { title: "Deployment Overview", href: "/deployment/overview", excerpt: "Deploy Mnemosyne to production", section: "Deployment" },
   { title: "Fly.io Deployment", href: "/deployment/fly-io", excerpt: "Serverless deployment with persistent SQLite volumes", section: "Deployment" },

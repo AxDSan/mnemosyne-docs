@@ -77,8 +77,8 @@ Verify it against `../mnemosyne`. Tool counts, environment variable names,
 CLI syntax, defaults, and benchmark figures have all been wrong on this site.
 Current ground truth:
 
-- **37 tool schemas declared, 28 callable over MCP**, 9 implemented only in the
-  Hermes provider. A page saying 6, 15, 17, 23, or 25 is stale.
+- **36 tools advertised, 28 callable over MCP**, 8 implemented only in the
+  Hermes provider. A page saying 6, 15, 17, 23, 25, or 37 is stale.
 - Sync subcommands are **hyphenated top-level commands** (`sync-serve`), and
   `mnemosyne sync` requires `--db-path` as well as `--remote`.
 - There is **no general-purpose REST API**. See `content/api/rest.mdx`.
