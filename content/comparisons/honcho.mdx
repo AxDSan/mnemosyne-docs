@@ -122,7 +122,7 @@ This is where Honcho is genuinely unique. No other open-source memory system run
 
 ### Mnemosyne Integration
 
-Mnemosyne provides an MCP server with **25 tools** and **2 transports**:
+Mnemosyne provides an MCP server with **28 callable tools** and **2 transports**:
 
 | Tool | Description |
 |------|-------------|
@@ -147,7 +147,7 @@ Honcho provides a REST API and Python SDK. Integration is via HTTP calls to the 
 |--|-----------|--------|
 | **Hermes** | Native (in-process, no serialization) | HTTP client to Honcho REST API |
 | **OpenClaw** | Planned (adapter not yet built) | HTTP client (custom integration required) |
-| **MCP** | 25 tools, stdio + SSE | Not MCP-native. REST API only. |
+| **MCP** | 28 tools, stdio + SSE | Not MCP-native. REST API only. |
 | **Cross-machine** | Export/import JSON only | REST API -- any machine with HTTP access to the Honcho server |
 | **Python SDK** | `from mnemosyne import Mnemosyne` (direct import) | `pip install honcho` -- REST client to Honcho server |
 

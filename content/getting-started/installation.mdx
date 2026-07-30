@@ -12,7 +12,7 @@ If you are an LLM agent installing Mnemosyne for a user, copy the block that mat
 pip install mnemosyne-memory[embeddings]
 ```
 
-**Hermes Agent plugin (most common — bundles core + embeddings automatically):**
+**Hermes Agent plugin (pair with a core install; see the note below):**
 
 ```bash
 pip install mnemosyne-hermes
@@ -78,7 +78,14 @@ pipx upgrade mnemosyne-memory
 
 **To use pipx with extras**: `pipx install 'mnemosyne-memory[embeddings]'` (quotes required around brackets).
 
-**Hermes Agent users**: install `pipx install mnemosyne-hermes` instead — this bundles `[embeddings]` automatically. See full instructions on the [Hermes Plugin page](/api/hermes-plugin).
+**Hermes Agent users**: `mnemosyne-hermes` is a thin wrapper that adds the plugin manifest and entry points. It does not bundle the core library or embeddings, so install it alongside one of the packages above and then point Hermes at it:
+
+```bash
+pip install --upgrade 'mnemosyne-memory[embeddings]' mnemosyne-hermes
+hermes config set memory.provider mnemosyne
+```
+
+See full instructions on the [Hermes Plugin page](/api/hermes-plugin).
 
 ## Verify Installation
 

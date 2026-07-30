@@ -110,7 +110,7 @@ All nodes carry `valid_at`/`invalid_at` timestamps for full temporal versioning.
 
 | | Mnemosyne | Zep |
 |--|-----------|-----|
-| **Tools** | 25 tools | 13 tools |
+| **Tools** | 28 over MCP | 13 tools |
 | **Transports** | stdio + SSE | stdio + SSE |
 | **SDKs** | Python (core library) | Python, TypeScript, Go |
 
@@ -137,7 +137,7 @@ mnemosyne mcp --bank project_a            # scoped to a specific bank
 
 | | Mnemosyne | Zep |
 |--|-----------|-----|
-| **Hermes** | Native (in-process, no serialization). 17 tools + 3 hooks via `plugin.yaml`. | MCP client only (network round-trip per call) |
+| **Hermes** | Native (in-process, no serialization). 31 tools + 3 hooks via `plugin.yaml`. | MCP client only (network round-trip per call) |
 | **Hooks** | `pre_llm_call`, `on_session_start`, `post_tool_call` | None (stateless API) |
 
 ---

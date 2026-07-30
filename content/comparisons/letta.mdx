@@ -127,7 +127,7 @@ This is where Letta is genuinely unique among memory systems. No other open-sour
 
 ### MCP (Model Context Protocol)
 
-Mnemosyne provides an MCP server with **25 tools** and **2 transports**:
+Mnemosyne provides an MCP server with **28 callable tools** and **2 transports**:
 
 | Tool | Description |
 |------|-------------|
@@ -152,7 +152,7 @@ Letta provides a REST API and Python SDK (`letta-client`). Agents are created se
 |--|-----------|-------|
 | **Hermes** | Native (in-process, no serialization) | REST API client to Letta server |
 | **OpenClaw** | Planned (adapter not yet built) | REST API client (custom integration required) |
-| **MCP** | 25 tools, stdio + SSE | Not MCP-native. Tool calls happen server-side inside the agent. |
+| **MCP** | 28 tools, stdio + SSE | Not MCP-native. Tool calls happen server-side inside the agent. |
 | **Cross-machine** | Export/import JSON only | REST API -- any machine with HTTP access to the Letta server |
 | **Python SDK** | `from mnemosyne import Mnemosyne` (direct import) | `pip install letta-client` → REST client to remote server |
 
