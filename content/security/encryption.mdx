@@ -98,7 +98,7 @@ Note: `from_config()` does not currently call `derive_key()` — passphrases are
 
 ```bash
 # Generate a random key
-mnemosyne sync generate-key
+mnemosyne sync-generate-key
 # Output: MNEMOSYNE_SYNC_KEY=7A8B3C... (base64, 32 bytes)
 
 # Use with CLI
@@ -140,7 +140,7 @@ An adversary with access to the remote sync server can learn *how many* events a
 
 | Command | Description |
 |---------|-------------|
-| `mnemosyne sync generate-key` | Generate a random 32-byte base64-encoded key |
+| `mnemosyne sync-generate-key` | Generate a random 32-byte base64-encoded key |
 | `mnemosyne sync --encrypt <key\|file>` | Sync with encryption enabled |
 
 ## Threat Model
@@ -171,7 +171,7 @@ An adversary with access to the remote sync server can learn *how many* events a
 3. **Rotate sync keys periodically** (every 90 days).
 4. **Back up encryption keys** separately from your Mnemosyne database. Losing the key means losing access.
 5. **Use environment-specific keys** — separate keys for dev, staging, production.
-6. **Monitor sync events** with `mnemosyne sync status --remote <url>`.
+6. **Monitor sync events** with `mnemosyne sync-status --remote <url>`.
 
 ## Related
 

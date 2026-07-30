@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+# The site is a static export, so a broken MDX import, an unresolvable
+# route shim, or a bad component reference is a build failure rather than
+# a runtime 500. That makes `next build` a genuine correctness gate, not
+# just a packaging step.
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      # Reports but does not block. Adding dist/** to the eslint ignores
+      # removed about 8,300 of 8,429 reported problems: the build output was
+      # being linted. What remains is 4 instances of one rule
+      # (react-hooks/set-state-in-effect) on hydration guards, all
+      # pre-existing. Flip this to a hard gate once those are resolved.
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
+
+      # Catches pages that build but render empty, and routes listed in
+      # pageOrder that produce no output. A slug in pageOrder with no
+      # route silently 404s in prev/next navigation, which the build
+      # itself does not flag.
+      - name: Smoke test the built output
+        run: python3 scripts/smoke-test.py --local
+
+      # A page that builds but renders no body is a few KB of layout shell,
+      # and nothing about that fails a build: the route generates, the
+      # layout renders, and only the content is missing. Section indexes
+      # that intentionally redirect are exempt, derived from the source.
+      - name: No page may render empty
+        run: python3 scripts/check-blank-pages.py
+
+  # Guards the invariant that AGENTS.md describes: page bodies live in
+  # content/, and every route under src/app/(docs) is a thin re-export.
+  # The two trees were previously full copies that drifted in opposite
+  # directions, so every page rendered one version's body under another
+  # version's title.
+  route-shims:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Every route must be a shim, not a copy
+        run: |
+          fail=0
+          while IFS= read -r page; do
+            if ! grep -q 'export { default } from' "$page"; then
+              echo "::error file=$page::route contains prose instead of re-exporting its content/ file (see AGENTS.md)"
+              fail=1
+            fi
+          done < <(find 'src/app/(docs)' -name 'page.mdx')
+          if [ "$fail" -eq 0 ]; then
+            echo "All route files are shims."
+          fi
+          exit $fail
+
+      - name: Every shim target must exist
+        run: |
+          fail=0
+          while IFS= read -r page; do
+            target=$(grep -o 'from "[^"]*"' "$page" | head -1 | sed 's/from "//; s/"//')
+            [ -z "$target" ] && continue
+            resolved=$(cd "$(dirname "$page")" && realpath -m "$target")
+            if [ ! -f "$resolved" ]; then
+              echo "::error file=$page::re-exports a file that does not exist: $target"
+              fail=1
+            fi
+          done < <(find 'src/app/(docs)' -name 'page.mdx')
+          if [ "$fail" -eq 0 ]; then
+            echo "All shim targets resolve."
+          fi
+          exit $fail

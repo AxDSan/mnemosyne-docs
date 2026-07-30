@@ -1,6 +1,6 @@
 # Installation
 
-Mnemosyne v3.12.0 installs in one command. This is the only guide you need — every other page links here.
+Mnemosyne installs in one command. This is the only guide you need — every other page links here.
 
 ## For AI Agents
 
@@ -12,7 +12,7 @@ If you are an LLM agent installing Mnemosyne for a user, copy the block that mat
 pip install mnemosyne-memory[embeddings]
 ```
 
-**Hermes Agent plugin (most common — bundles core + embeddings automatically):**
+**Hermes Agent plugin (pair with a core install; see the note below):**
 
 ```bash
 pip install mnemosyne-hermes
@@ -58,7 +58,7 @@ pipx install mnemosyne-memory[all]
 
 ```bash
 python3 -c "import mnemosyne; print(mnemosyne.__version__)"
-# Should print: 3.12.0
+# Prints the installed version
 ```
 
 ## Upgrade
@@ -78,7 +78,14 @@ pipx upgrade mnemosyne-memory
 
 **To use pipx with extras**: `pipx install 'mnemosyne-memory[embeddings]'` (quotes required around brackets).
 
-**Hermes Agent users**: install `pipx install mnemosyne-hermes` instead — this bundles `[embeddings]` automatically. See full instructions on the [Hermes Plugin page](/api/hermes-plugin).
+**Hermes Agent users**: `mnemosyne-hermes` is a thin wrapper that adds the plugin manifest and entry points. It does not bundle the core library or embeddings, so install it alongside one of the packages above and then point Hermes at it:
+
+```bash
+pip install --upgrade 'mnemosyne-memory[embeddings]' mnemosyne-hermes
+hermes config set memory.provider mnemosyne
+```
+
+See full instructions on the [Hermes Plugin page](/api/hermes-plugin).
 
 ## Verify Installation
 

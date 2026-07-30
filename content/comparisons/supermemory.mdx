@@ -13,7 +13,7 @@ export const metadata = {
 
 An honest, technical comparison for developers choosing between a local-first memory engine and a zero-code SaaS context stack.
 
-**Last updated:** 2026-06-08 · Mnemosyne v3.12.0 · SuperMemory (as of May 2026)
+**Last updated:** 2026-07-30 · Mnemosyne v3.14.0 · SuperMemory (as of May 2026)
 
 > **TL;DR:** SuperMemory is a **managed SaaS context layer** with a five-layer architecture, zero-code Memory Router integration, and the strongest consumer offering in the space. Mnemosyne is a **local-first memory engine** that runs entirely on your machine with no external dependencies. SuperMemory wins on ease of adoption and consumer polish; Mnemosyne wins on privacy, full local control, and cost at scale.
 
@@ -78,9 +78,9 @@ There is no equivalent in Mnemosyne. Mnemosyne integrates via explicit tool call
 |--|-----------|-------------|
 | **Integration model** | Explicit tool calls / MCP server | Drop-in proxy (change baseURL + headers) |
 | **Code changes required** | Add memory calls to your agent loop | Zero code changes to existing LLM calls |
-| **Hermes Agent** | Native (in-process, 17 tools, 3 hooks) | Via HTTP proxy (no native plugin) |
+| **Hermes Agent** | Native (in-process, 31 tools, 3 hooks) | Via HTTP proxy (no native plugin) |
 | **OpenClaw** | Planned (adapter not yet built) | Via HTTP proxy |
-| **MCP** | 25 tools, stdio + SSE | Custom HTTP API via Memory Router |
+| **MCP** | 28 tools, stdio + SSE | Custom HTTP API via Memory Router |
 
 > **Who this matters to:** If you have an existing app making OpenAI API calls and you want to add memory without touching your codebase, the Memory Router is uniquely compelling. If you're building an agent from scratch and want fine-grained control over what gets remembered and how, Mnemosyne's explicit API gives you more precision.
 
@@ -129,7 +129,7 @@ This is where the two products diverge most dramatically.
 | **GitHub stars** | Newer project, growing | ~22.4K — strong consumer developer community |
 | **License** | MIT | Proprietary (source-available for client SDKs) |
 | **Documentation** | Full docs (this site) + API reference | docs.supermemory.ai, interactive playground |
-| **Integrations** | Hermes Agent (native, 17 tools, 3 hooks), MCP (25 tools, stdio + SSE), OpenClaw (planned) | Memory Router (OpenAI-compatible proxy), Notion, Slack, Google Drive connectors |
+| **Integrations** | Hermes Agent (native, 31 tools, 3 hooks), MCP (28 tools, stdio + SSE), OpenClaw | Memory Router (OpenAI-compatible proxy), Notion, Slack, Google Drive connectors |
 | **SDK languages** | Python | TypeScript (primary), REST API |
 | **Target audience** | Developers building agents, local-first enthusiasts | Consumer app developers, TypeScript ecosystem, no-code/low-code users |
 | **Academic depth** | BEAM: published architecture with formal memory model | Less academic publication; product-focused engineering |
@@ -162,7 +162,7 @@ Free. MIT license. No tiers, no usage caps, no API costs. Use it forever with ze
 
 - You want **full data sovereignty** — everything stays on your machine
 - You need **offline capability** — agents that work without internet
-- You're building for **Hermes Agent** and want deep, native integration (17 tools, hooks)
+- You're building for **Hermes Agent** and want deep, native integration (31 tools, hooks)
 - You want **predictable costs** — no per-token tiers, no SaaS subscription
 - You need **open source** — MIT license, full code access, no vendor lock-in
 - You want **explicit control** over what gets remembered, when, and how
@@ -199,4 +199,4 @@ SuperMemory and Mnemosyne represent fundamentally different philosophies. SuperM
 
 ---
 
-*Every claim about SuperMemory has been verified against their public documentation and pricing page (as of May 2026). Every claim about Mnemosyne has been verified against the v3.12.0 source code. MemoryBench rankings and five-layer architecture details are from SuperMemory's published benchmarks and architecture docs. If anything here is wrong, please open an issue — we'll fix it.*
+*Every claim about SuperMemory has been verified against their public documentation and pricing page (as of May 2026). Every claim about Mnemosyne has been verified against the v3.14.0 source code. MemoryBench rankings and five-layer architecture details are from SuperMemory's published benchmarks and architecture docs. If anything here is wrong, please open an issue — we'll fix it.*

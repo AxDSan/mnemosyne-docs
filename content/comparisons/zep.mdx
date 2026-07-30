@@ -13,7 +13,7 @@ export const metadata = {
 
 An honest, technical comparison for users who need memory systems for AI agents and are evaluating Zep's Graphiti temporal knowledge graph against Mnemosyne's local-first approach.
 
-**Last updated:** 2026-06-08 · Mnemosyne v3.12.0
+**Last updated:** 2026-07-30 · Mnemosyne v3.14.0
 
 > **TL;DR:** These are fundamentally different deployment philosophies. Zep is a **cloud-native context engineering platform** with best-in-class temporal reasoning and a sophisticated knowledge graph engine. Mnemosyne is a **local-first memory layer** optimized for simplicity, zero-network deployments, and full user control. Zep excels at temporal fact tracking; Mnemosyne excels at being a lightweight, dependency-free memory layer you fully own.
 
@@ -110,7 +110,7 @@ All nodes carry `valid_at`/`invalid_at` timestamps for full temporal versioning.
 
 | | Mnemosyne | Zep |
 |--|-----------|-----|
-| **Tools** | 25 tools | 13 tools |
+| **Tools** | 28 over MCP | 13 tools |
 | **Transports** | stdio + SSE | stdio + SSE |
 | **SDKs** | Python (core library) | Python, TypeScript, Go |
 
@@ -137,7 +137,7 @@ mnemosyne mcp --bank project_a            # scoped to a specific bank
 
 | | Mnemosyne | Zep |
 |--|-----------|-----|
-| **Hermes** | Native (in-process, no serialization). 17 tools + 3 hooks via `plugin.yaml`. | MCP client only (network round-trip per call) |
+| **Hermes** | Native (in-process, no serialization). 31 tools + 3 hooks via `plugin.yaml`. | MCP client only (network round-trip per call) |
 | **Hooks** | `pre_llm_call`, `on_session_start`, `post_tool_call` | None (stateless API) |
 
 ---
@@ -256,4 +256,4 @@ Mnemosyne is free (MIT license) with no usage caps, no credit systems, and no re
 
 ---
 
-*This page compares Mnemosyne v3.12.0 against Zep's current cloud offering as of May 2026. Zep's Community Edition was deprecated and is no longer available for self-hosting. Every Mnemosyne feature listed has been verified against the source code. If anything here is wrong, please open an issue -- we'll fix it.*
+*This page compares Mnemosyne v3.14.0 against Zep's current cloud offering as of May 2026. Zep's Community Edition was deprecated and is no longer available for self-hosting. Every Mnemosyne feature listed has been verified against the source code. If anything here is wrong, please open an issue -- we'll fix it.*

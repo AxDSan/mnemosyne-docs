@@ -1,6 +1,6 @@
 {
-  "version": "3.4.0",
-  "tool_count": 24,
+  "version": "3.14.0",
+  "tool_count": 36,
   "config_keys": [
     "auto_sleep",
     "sleep_threshold",
@@ -39,5 +39,6 @@
     "mnemosyne_graph_link"
   ],
   "pypi_package": "mnemosyne-memory",
-  "provider_class": "MnemosyneMemoryProvider"
+  "provider_class": "MnemosyneMemoryProvider",
+  "mcp_tool_count": 28
 }

@@ -42,16 +42,16 @@ else:
 
 
 PAGES = [
-    {"path": "/getting-started/", "contains": ["pip install", "mnemosyne-memory"]},
+    {"path": "/getting-started/quick-start/", "contains": ["Prerequisites"]},
     {"path": "/getting-started/configuration/", "contains": ["MNEMOSYNE_DATA_DIR", "MNEMOSYNE_MCP_TOKEN", "BAAI/bge-small-en-v1.5"]},
-    {"path": "/api/tool-schema/", "contains": ["23 MCP tools", "mnemosyne_remember", "mnemosyne_recall"]},
-    {"path": "/api/mcp-server/", "contains": ["23 Mnemosyne tools", "stdio", "SSE"]},
+    {"path": "/api/tool-schema/", "contains": ["mnemosyne_remember", "mnemosyne_recall", "over MCP"]},
+    {"path": "/api/mcp-server/", "contains": ["stdio", "SSE"]},
     {"path": "/api/python-sdk/", "contains": ["Mnemosyne", "remember", "recall", "top_k"]},
     {"path": "/architecture/beam-overview/", "contains": ["working", "episodic", "scratchpad"]},
     {"path": "/operations/monitoring/", "contains": ["hermes mnemosyne stats", "mnemosyne_diagnose"]},
     {"path": "/operations/performance/", "contains": ["vec_episodes", "WM_MAX_ITEMS"]},
     {"path": "/retrieval/ranking/", "contains": ["0.5", "0.3", "0.2"]},
-    {"path": "/comparisons/zep/", "contains": ["23 tools"]},
+    {"path": "/comparisons/zep/", "contains": ["over MCP"]},
 ]
 
 failed = 0

@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'REST API — Mnemosyne HTTP Endpoints Reference',
-  description: 'REST API reference for Mnemosyne legacy FastAPI server: HTTP endpoints for memory CRUD, search, session context, and consolidation. Includes request formats and examples.',
+  title: 'HTTP Interfaces — Mnemosyne Sync Server, Memory Browser, MCP SSE',
+  description: 'The HTTP surfaces Mnemosyne actually exposes: the stdlib sync server, the optional memory browser, and the MCP SSE transport. There is no general-purpose REST CRUD API.',
   openGraph: {
     images: ['/og-image.svg'],
   },
@@ -9,166 +9,62 @@ export const metadata = {
   },
 };
 
-# REST API
+# HTTP Interfaces
 
-Legacy FastAPI HTTP interface for remote access and service integration.
+<Callout type="warning" title="There is no general-purpose REST API">
+This page previously documented a FastAPI CRUD server with `POST /store`, `POST /recall`, a `mnemosyne/server:latest` Docker image, a `python -m mnemosyne --host --port` start command, and Swagger endpoints. **None of that exists in the codebase.** There is no `__main__.py`, no such Docker image, no `serve` or `api` command, and no `MNEMOSYNE_CORS_ORIGINS` variable.
 
-<Callout type="warning" title="Legacy Interface">
-The REST API server is a legacy FastAPI application embedded in `mnemosyne/cli.py`. It is not part of the BEAM architecture. For new integrations, prefer the Python SDK or Hermes plugin.
+If you were building against those endpoints, they never shipped. Use the [Python SDK](/api/python-sdk), the [MCP server](/api/mcp-server), or the [Hermes plugin](/api/hermes-plugin) instead.
 </Callout>
 
-## Starting the Server
+Mnemosyne is a library, not a service. It exposes three narrow HTTP surfaces, each for a specific job, and none of them is a memory CRUD API.
 
-<CodeBlock code={`export MNEMOSYNE_DATA_DIR=./memory_data && \\
-    python -m mnemosyne \\
-    --host 0.0.0.0 \\
-    --port 8090
-`} language="bash" />
+## 1. Sync server
 
-Or via Docker:
+A deliberately minimal server built on the Python standard library. No FastAPI, no external dependencies. Its only purpose is replicating a shared surface between your own devices.
 
-<CodeBlock code={`docker run -p 8090:8090 \
-    -v $(pwd)/memory.db:/data/memory.db \
-    mnemosyne/server:latest
-`} language="bash" />
+<CodeBlock code={`mnemosyne sync-serve \\
+    --db-path /path/to/surface.db \\
+    --host 127.0.0.1 \\
+    --port 8765 \\
+    --api-key-file /path/to/api-key`} language="bash" />
 
-## Endpoints
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/sync/pull` | POST | Pull events from the server's event log |
+| `/sync/push` | POST | Push local events to the server |
+| `/sync/status` | GET | Device id, cursor, event count, encryption state |
+| `/healthz` | GET | Liveness probe |
 
-### Status
+Authentication is a bearer API key or a JWT, supplied on the command line rather than by environment variable. Point `--db-path` at a dedicated shared-surface database, never a private one.
 
-<CodeBlock code={`GET /
+This is a management API, not a general HTTP service. It cannot store or search memories. See [Sync](/operations/sync).
 
-# Response:
-{
-  "status": "ok",
-  "version": "3.1.2",
-  "working_count": 42,
-  "episodic_count": 128,
-  "semantic_count": 64
-}
-`} language="bash" />
+## 2. Memory browser
 
-### Store Memory
+An optional read-only web UI for inspecting what is in your database.
 
-<CodeBlock code={`POST /store
-Content-Type: application/json
+<CodeBlock code={`pip install fastapi uvicorn
+mnemosyne-browser`} language="bash" />
 
-{
-  "content": "User prefers dark mode.",
-  "tags": ["preferences", "ui"],
-  "importance": 0.8,
-  "source": "conversation"
-}
+It is a separate console script, not part of the core install, and it opens databases read-only. It is for looking, not for writing. There is no stable HTTP contract; treat it as a UI, not an API.
 
-# Response:
-{
-  "id": "mem_abc123",
-  "status": "stored"
-}
-`} language="bash" />
+## 3. MCP over SSE
 
-### Recall (Search)
+The MCP server supports an SSE transport for clients that cannot use stdio.
 
-<CodeBlock code={`GET /recall?query=user+preferences&top_k=5
+<CodeBlock code={`mnemosyne mcp --transport sse --port 8080`} language="bash" />
 
-# Response:
-{
-  "results": [
-    {
-      "id": "mem_abc123",
-      "content": "User prefers dark mode.",
-      "score": 0.95,
-      "tags": ["preferences", "ui"]
-    }
-  ],
-  "total": 1
-}
-`} language="bash" />
+This speaks the Model Context Protocol, not REST. Tools are invoked as MCP tool calls. A non-loopback bind requires `MNEMOSYNE_MCP_TOKEN`.
 
-### Session Context
+This is the closest thing to a remote memory API, and it is the one to use if you need network access to memory operations. See the [MCP server reference](/api/mcp-server) and the [tool schema](/api/tool-schema).
 
-<CodeBlock code={`GET /session/{session_id}
+## Which one do I want?
 
-# Response:
-{
-  "session_id": "sess_123",
-  "memories": [
-    {
-      "id": "mem_abc123",
-      "content": "User prefers dark mode.",
-      "tags": ["preferences", "ui"],
-      "importance": 0.8,
-      "created_at": "2026-04-25T14:30:00Z"
-    }
-  ],
-  "total": 1
-}
-`} language="bash" />
-
-### Statistics
-
-<CodeBlock code={`GET /stats
-
-# Response:
-{
-  "working_count": 42,
-  "episodic_count": 128,
-  "semantic_count": 64,
-  "db_size_mb": 12.5,
-  "last_sleep_at": "2026-04-25T13:00:00Z"
-}
-`} language="bash" />
-
-### Forget (Delete Memory)
-
-<CodeBlock code={`DELETE /forget/{memory_id}
-
-# Response:
-{
-  "status": "forgotten",
-  "id": "mem_abc123"
-}
-`} language="bash" />
-
-### Update Memory
-
-<CodeBlock code={`PUT /update/{memory_id}
-Content-Type: application/json
-
-{
-  "content": "User prefers dark mode and large fonts.",
-  "importance": 0.9
-}
-`} language="bash" />
-
-### Consolidate
-
-<CodeBlock code={`POST /consolidate
-
-# Response:
-{
-  "status": "consolidated",
-  "consolidated_count": 15,
-  "evicted_count": 3
-}
-`} language="bash" />
-
-## Error Responses
-
-| Status | Code | Description |
-|--------|------|-------------|
-| 400 | `INVALID_REQUEST` | Malformed request body |
-| 404 | `NOT_FOUND` | Memory not found |
-| 500 | `INTERNAL_ERROR` | Server error |
-
-## OpenAPI Spec
-
-The server exposes OpenAPI documentation at:
-
-- Swagger UI: `http://localhost:8090/docs`
-- ReDoc: `http://localhost:8090/redoc`
-- OpenAPI JSON: `http://localhost:8090/openapi.json`
-
-<Callout type="info" title="CORS">
-The REST server enables CORS by default for all origins in development. In production, configure allowed origins via `MNEMOSYNE_CORS_ORIGINS`.
-</Callout>
+| Goal | Use |
+|---|---|
+| Store and recall memories from another machine | [MCP over SSE](/api/mcp-server) |
+| Store and recall memories in the same process | [Python SDK](/api/python-sdk) |
+| Keep two of your own devices in sync | [Sync server](/operations/sync) |
+| Look at what is stored | `mnemosyne-browser`, or `mnemosyne stats` |
+| Integrate with a Hermes agent | [Hermes plugin](/api/hermes-plugin) |

@@ -13,7 +13,7 @@ export const metadata = {
 
 An honest, technical comparison for developers and teams choosing a memory system for AI agents.
 
-**Last updated:** 2026-06-08 · Mnemosyne v3.12.0 · Mem0 Platform (as of May 2026)
+**Last updated:** 2026-07-30 · Mnemosyne v3.14.0 · Mem0 Platform (as of May 2026)
 
 > **TL;DR:** Mem0 is a **cloud memory platform** with the largest community (48K+ GitHub stars), SOC 2 + HIPAA compliance, and a drop-in API. Mnemosyne is a **local-first memory engine** that runs entirely on your machine with no external API calls required. Mem0 wins on ease of adoption and compliance; Mnemosyne wins on privacy, cost predictability, and offline capability.
 
@@ -94,7 +94,7 @@ This is where the two diverge most sharply.
 | **GitHub stars** | Newer project, growing | ~48K — largest memory layer community |
 | **License** | MIT | Apache 2.0 |
 | **Documentation** | Full docs (this site) + API reference | docs.mem0.ai, rich cookbook |
-| **Integrations** | Hermes Agent (native, 17 tools, 3 hooks), MCP (25 tools, stdio + SSE), OpenClaw (planned) | LangChain, LlamaIndex, CrewAI, AutoGen, OpenAI Agents SDK |
+| **Integrations** | Hermes Agent (native, 31 tools, 3 hooks), MCP (28 tools, stdio + SSE), OpenClaw | LangChain, LlamaIndex, CrewAI, AutoGen, OpenAI Agents SDK |
 | **SDK languages** | Python | Python, JavaScript/TypeScript, Go (beta) |
 | **Production users** | Early adopters, single-user agents | Public case studies, enterprise deployments |
 
@@ -126,7 +126,7 @@ Free. MIT license. No tiers, no usage caps, no API costs. Use it forever with ze
 
 - You want **zero external API dependencies** — everything runs locally
 - You need **offline capability** — agents that work without internet
-- You're building for **Hermes Agent** and want deep, native integration (17 tools, hooks)
+- You're building for **Hermes Agent** and want deep, native integration (31 tools, hooks)
 - You want **predictable costs** — no per-operation token burn, no usage tiers
 - You're on a **single machine** and don't need cross-device sync
 - You want full control: your SQLite file, your models, your data
@@ -168,4 +168,4 @@ The importer pulls all memories via the Mem0 SDK (with REST fallback), preserves
 
 ---
 
-*Every claim about Mem0 has been verified against their public docs and pricing page (as of May 2026). Every claim about Mnemosyne has been verified against the v3.12.0 source code. If anything here is wrong, please open an issue — we'll fix it.*
+*Every claim about Mem0 has been verified against their public docs and pricing page (as of May 2026). Every claim about Mnemosyne has been verified against the v3.14.0 source code. If anything here is wrong, please open an issue — we'll fix it.*

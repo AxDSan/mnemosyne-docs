@@ -559,7 +559,7 @@ export const PAGE_METADATA: Record<string, PageMeta> = {
   "/getting-started/updating": {
     title: "Updating Mnemosyne — Version Upgrades & Data Migration",
     description:
-      "Complete guide to updating Mnemosyne from any version. Covers v2.7 through v3.1.2, schema migrations, data export/import, rollback procedures, and troubleshooting.",
+      "Complete guide to updating Mnemosyne from any version. Covers schema migrations, data export/import, rollback procedures, and troubleshooting.",
     keywords: [
       "updating",
       "upgrade",
